@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lagu untuk Sayang</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Figtree:wght@400;600&family=Young+Serif&display=swap" rel="stylesheet">
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { anggur:'#2a1117', anggur2:'#3b1a23', mawar:'#d9667a', madu:'#f0b35a', kertas:'#f7e4dc', teks:'#fbefe9' },
+  fontFamily: { judul:['"Young Serif"','Georgia','serif'], tulis:['Caveat','cursive'], badan:['Figtree','system-ui','sans-serif'] }
+} } }
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-badan text-teks antialiased">
+
+<!-- Latar: foto yang sama, diburamkan -->
+<div class="fixed inset-0 -z-10 overflow-hidden bg-anggur" aria-hidden="true">
+  <div id="bgA" class="bg"></div>
+  <div id="bgB" class="bg"></div>
+  <div class="absolute inset-0 bg-gradient-to-br from-anggur/85 via-anggur/70 to-anggur/95"></div>
+</div>
+
+<!-- Sampul pembuka -->
+<div id="cover" class="fixed inset-0 z-40 grid place-items-center bg-anggur px-6 text-center transition-opacity duration-1000">
+  <div class="max-w-xl">
+    <p class="text-lg text-teks/70">Sebuah lagu untuk</p>
+    <p id="coverName" class="mt-1 font-tulis text-7xl leading-none text-madu sm:text-8xl"></p>
+    <h2 id="coverTitle" class="mt-6 font-judul text-2xl text-teks sm:text-3xl"></h2>
+    <button id="open" type="button" class="mt-10 inline-flex items-center gap-3 rounded-full bg-mawar px-8 py-4 text-lg font-semibold text-anggur shadow-xl shadow-mawar/20 transition hover:brightness-110 active:scale-95">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      Buka &amp; putar lagu
+    </button>
+  </div>
+</div>
+
+<main class="mx-auto grid max-w-6xl gap-10 px-5 py-8 sm:px-8 lg:min-h-screen lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:gap-16 lg:py-12">
+
+  <!-- FOTO -->
+  <section aria-label="Foto kenangan">
+    <div class="relative mx-auto w-full max-w-sm sm:max-w-md">
+      <div class="absolute inset-0 rotate-[5deg] rounded-sm bg-kertas/20" aria-hidden="true"></div>
+      <figure id="polaroid" class="polaroid relative -rotate-2 rounded-sm bg-kertas p-3 shadow-2xl shadow-black/60 sm:p-4">
+        <div class="relative aspect-[4/5] overflow-hidden bg-anggur2">
+          <div id="empty" class="absolute inset-0 grid place-items-center p-8 text-center">
+            <p class="font-tulis text-3xl leading-tight text-kertas/70">Foto</p>
+          </div>
+          <img id="imgA" class="slide" alt="Foto kenangan">
+          <img id="imgB" class="slide" alt="Foto kenangan">
+        </div>
+        <figcaption id="polaCap" class="px-1 pb-1 pt-3 text-center font-tulis text-3xl leading-none text-anggur sm:text-4xl"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- PEMUTAR + LIRIK -->
+  <section class="min-w-0">
+    <p id="meta" class="text-base text-teks/70"></p>
+    <h1 id="titleOut" class="mt-1 font-judul text-4xl leading-tight sm:text-5xl"></h1>
+
+    <div class="mt-6 rounded-3xl border border-teks/10 bg-anggur/50 p-4 backdrop-blur-md sm:p-6">
+      <div class="flex items-center gap-3">
+        <span id="eq" class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="text-sm text-teks/60">Sedang diputar</span>
+      </div>
+      <p id="caption" class="mt-3 min-h-[5.5rem] font-judul text-2xl leading-snug text-madu sm:text-3xl" aria-live="polite">Tekan tombol putar untuk mendengarkan.</p>
+      <div id="list" class="mt-4 h-56 space-y-3 overflow-y-auto pr-2 text-lg sm:h-64 sm:text-xl" aria-label="Daftar lirik"></div>
+
+      <div class="mt-5 flex items-center gap-3">
+        <button id="play" type="button" aria-label="Putar atau jeda" class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-mawar text-anggur transition hover:brightness-110 active:scale-95">
+          <svg id="icoPlay" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="icoPause" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        </button>
+        <input id="seek" type="range" min="0" max="100" value="0" step="0.1" class="min-w-0 flex-1" aria-label="Posisi lagu">
+        <span id="time" class="w-24 shrink-0 text-right text-sm tabular-nums text-teks/60">0:00 / 0:00</span>
+      </div>
+      <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-teks/10 pt-4 text-sm">
+        <span class="text-teks/60">Waktu lirik:</span>
+        <button id="maju" type="button" class="rounded-full border border-teks/25 px-3.5 py-1.5 transition hover:border-madu hover:text-madu">Lebih cepat</button>
+        <button id="tunda" type="button" class="rounded-full border border-teks/25 px-3.5 py-1.5 transition hover:border-madu hover:text-madu">Lebih lambat</button>
+        <span id="geserVal" class="tabular-nums text-teks/60">0.0 dtk</span>
+        <span class="mx-1 hidden h-4 w-px bg-teks/20 sm:inline-block"></span>
+        <button id="salinAuto" type="button" class="rounded-full border border-teks/25 px-3.5 py-1.5 transition hover:border-madu hover:text-madu">Salin lirik hasil</button>
+        <button id="hapus" type="button" class="rounded-full border border-teks/25 px-3.5 py-1.5 transition hover:border-mawar hover:text-mawar">Catat ulang</button>
+      </div>
+    </div>
+
+    <!-- Mode catat lirik: buka index.html#catat -->
+    <div id="catat" class="mt-6 hidden rounded-2xl border border-madu/40 bg-anggur/60 p-4">
+      <p class="text-sm text-teks/75">Mode catat lirik. Pakai speaker (bukan headset), tekan tombol, lalu salin hasilnya ke <b>lirik</b> di js/config.js.</p>
+      <button id="auto" type="button" class="mt-3 rounded-full bg-mawar px-5 py-2.5 text-sm font-semibold text-anggur">Dengarkan &amp; catat lirik</button>
+      <textarea id="hasil" rows="7" readonly class="mt-3 w-full rounded-xl border border-teks/20 bg-teks/5 p-3 text-sm text-teks"></textarea>
+      <button id="salin" type="button" class="mt-2 rounded-full border border-teks/25 px-4 py-2 text-sm">Salin hasil</button>
+    </div>
+
+    <!-- Mode sinkron: buka index.html#sinkron -->
+    <div id="sinkron" class="mt-6 hidden rounded-2xl border border-madu/40 bg-anggur/60 p-4">
+      <p class="text-sm text-teks/75">Putar lagu, lalu tekan tombol <b>tepat saat baris di bawah mulai dinyanyikan</b>. Setelah selesai, salin hasilnya ke <b>lirik</b> di js/config.js.</p>
+      <p id="nowLine" class="mt-4 font-judul text-2xl text-madu"></p>
+      <p id="nextLine" class="mt-1 text-base text-teks/50"></p>
+      <div class="mt-4 flex flex-wrap items-center gap-2.5">
+        <button id="tandai" type="button" class="rounded-full bg-mawar px-6 py-3 font-semibold text-anggur active:scale-95">Tandai baris ini</button>
+        <button id="ulang" type="button" class="rounded-full border border-teks/25 px-4 py-2.5 text-sm">Ulangi baris sebelumnya</button>
+        <span id="sCount" class="text-sm text-teks/60"></span>
+      </div>
+      <textarea id="hasil2" rows="7" readonly class="mt-3 w-full rounded-xl border border-teks/20 bg-teks/5 p-3 text-sm text-teks"></textarea>
+      <button id="salin2" type="button" class="mt-2 rounded-full border border-teks/25 px-4 py-2 text-sm">Salin hasil</button>
+    </div>
+  </section>
+</main>
+
+<audio id="audio" preload="metadata"></audio>
+<div id="toast" class="pointer-events-none fixed inset-x-0 bottom-6 z-50 mx-auto w-fit max-w-[90vw] translate-y-4 rounded-full bg-kertas px-5 py-3 text-center text-sm font-semibold text-anggur opacity-0 shadow-xl transition" role="status"></div>
+
+<script src="js/config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
